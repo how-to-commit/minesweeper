@@ -32,19 +32,14 @@ class Cell():
 
 
 class Board():
-    def __init__(self, rows=5, cols=5, mines=5, debug=False):
+    def _setBoard(self, rows=5, cols=5, mines=5):
+        """setBoard sets up the board.
+        WARN: DO NOT CALL THIS MID-GAME!"""
+        
         self.rows = rows
         self.cols = cols
         self.mines = mines
-        self.__setBoard()
-        
-        if debug:
-            self._dbg_ShowBoard()
 
-
-    def __setBoard(self):
-        """setBoard sets up the board.
-        WARN: DO NOT CALL THIS MID-GAME!"""
         self.board = [[Cell() for _ in range(self.cols)] for _ in range(self.rows)]
 
         # setting mines
@@ -68,6 +63,7 @@ class Board():
         vis_count = 0
         wincond_vis_count = self.rows * self.cols
 
+        # counts flagged mines and visible numbers, you need all of them to win the game
         for row in self.board:
             for cell in row:
                 if cell.is_mine and cell.is_flag:
@@ -76,18 +72,20 @@ class Board():
                 elif cell.is_vis:
                     vis_count += 1
         
+        # checks wincond
         if (flagged_mine_count == self.mines) and (vis_count == wincond_vis_count):
-            self.endGame(win=True)
-
-
-    def endGame(self, win):
-        # TODO: implement restart
-        if win:
-            print("You win!")
-            exit()
+            return True
         else:
-            print("You hit a mine!")
-            exit()
+            return False
+
+
+    def loseCheck(self, click_row, click_col):
+        # only loss condition is if you click on a mine
+        # worked around by using click_row + click_col passed to it from interface.py
+        if self.board[click_row][click_col].is_mine:
+            return True
+        else:
+            return False
 
 
     def _dbg_ShowBoard(self):
@@ -99,8 +97,6 @@ class Board():
 
     def onflag(self, row, col):
         self.board[row][col].flag()
-        
-        self.winCheck()
     
     def onclick(self, row, col):
         self.onclick_empty = []
@@ -126,13 +122,11 @@ class Board():
                             self.board[row+drow][col+dcol].show()
 
             # recurse here to get to the rest of the board
+            # might need to finetune what gets handed to the list because its SLOW
             for _row, _col in self.onclick_empty:
                 self.onclick(_row, _col)
 
-        # check whether won or lost:
-        if self.board[row][col].is_mine:
-            self.endGame(False)
-        else:
-            self.winCheck()
+
+
 
 
