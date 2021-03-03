@@ -59,7 +59,7 @@ class Interface:
                 cols = int(cols)
                 break
         while True:
-            mines = int(input("Enter number of mines: "))
+            mines = input("Enter number of mines: ")
             if mines.isnumeric():
                 mines = int(mines)
                 break

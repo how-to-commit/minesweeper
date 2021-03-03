@@ -89,7 +89,8 @@ class Board():
 
 
     def _dbg_ShowBoard(self):
-        """Debug function to show all."""
+        # debug to show all
+        # not called anywhere, just kept here <<
         for vertx in self.board:
             for cell in vertx:
                 cell.show()
