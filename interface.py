@@ -89,13 +89,19 @@ class Interface:
         print('   ', end='')
 
         for index in range(self.board.cols):
-            print(" {}  ".format(index), end='')
+            if index < 10:
+                print(" {}  ".format(index), end='')
+            else:
+                print(" {} ".format(index), end='')
 
         print('\n', end='')
         print("  " + u'\u250C' + (((u'\u2500' * 3) + u'\u252C') * self.board.cols) + '\b' + u'\u2510')
 
         for vertx in self.board.board:
-            print(str(loopct) + ' ', end='')
+            if loopct < 10: 
+                print(str(loopct) + ' ', end='')
+            else:
+                print(str(loopct), end='')
             loopct += 1
 
             for cell in vertx:
